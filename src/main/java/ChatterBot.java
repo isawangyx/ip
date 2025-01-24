@@ -33,6 +33,8 @@ public class ChatterBot {
                     handleMarkCommand(tasks, userInput);
                 } else if (userInput.startsWith("unmark")) {
                     handleUnmarkCommand(tasks, userInput);
+                } else if (userInput.startsWith("delete")) {
+                    handleDeleteCommand(tasks, userInput);
                 } else {
                     throw new UnknownCommandException();
                 }
@@ -113,5 +115,21 @@ public class ChatterBot {
         System.out.println("Got it. I've added this task:");
         System.out.println("  " + task);
         System.out.println("Now you have " + taskCount + " tasks in the list.");
+    }
+
+    private static void handleDeleteCommand(ArrayList<Task> tasks, String userInput) {
+        try {
+            int taskIdx = Integer.parseInt(userInput.substring(7).trim()) - 1;
+            if (taskIdx >= 0 && taskIdx < tasks.size()) {
+                Task removedTask = tasks.remove(taskIdx);
+                System.out.println("Noted. I've removed this task:");
+                System.out.println("  " + removedTask);
+                System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+            } else {
+                System.out.println("Invalid task number. Please enter a valid task number to delete.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Please specify a valid task number to delete.");
+        }
     }
 }
