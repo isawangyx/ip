@@ -1,8 +1,18 @@
-import java.util.Scanner;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class ChatterBot {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
+        // Set up I/O redirection for testing
+        if (args.length > 0 && args[0].equals("test")) {
+            System.setIn(new FileInputStream("text-ui-test/input.txt"));
+            System.setOut(new PrintStream(new FileOutputStream("text-ui-test/ACTUAL.txt")));
+        }
+
         Scanner sc = new Scanner(System.in);
         ArrayList<Task> tasks = new ArrayList<>();
 
