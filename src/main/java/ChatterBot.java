@@ -1,8 +1,13 @@
+import exceptions.ChatterBotException;
+import exceptions.UnknownCommandException;
+import exceptions.EmptyDescriptionException;
+
 import java.util.Scanner;
 import java.util.ArrayList;
 
 public class ChatterBot {
     public static void main(String[] args) {
+
         Scanner sc = new Scanner(System.in);
         ArrayList<Task> tasks = new ArrayList<>();
 
@@ -10,57 +15,98 @@ public class ChatterBot {
         System.out.println("What can I do for you?");
 
         while (true) {
-            String userInput = sc.nextLine();
+            try {
+                String userInput = sc.nextLine();
 
-            if (userInput.equals("bye")) {
-                System.out.println("Bye. Hope to see you again soon!");
-                break;
-            } else if (userInput.equals("list")) {
-                System.out.println("Here are the tasks in your list:");
-                for (int i = 0; i < tasks.size(); i++) {
-                    System.out.println((i + 1) + ". " + tasks.get(i));
+                if (userInput.equals("bye")) {
+                    System.out.println("Bye. Hope to see you again soon!");
+                    break;
+                } else if (userInput.equals("list")) {
+                    handleListCommand(tasks);
+                } else if (userInput.startsWith("todo")) {
+                    handleTodoCommand(tasks, userInput);
+                } else if (userInput.startsWith("deadline")) {
+                    handleDeadlineCommand(tasks, userInput);
+                } else if (userInput.startsWith("event")) {
+                    handleEventCommand(tasks, userInput);
+                } else if (userInput.startsWith("mark")) {
+                    handleMarkCommand(tasks, userInput);
+                } else if (userInput.startsWith("unmark")) {
+                    handleUnmarkCommand(tasks, userInput);
+                } else {
+                    throw new UnknownCommandException();
                 }
-            } else if (userInput.startsWith("todo ")) {
-                String description = userInput.substring(5);
-                Task newTask = new Todo(description);
-                tasks.add(newTask);
-                printAddedTask(newTask, tasks.size());
-            } else if (userInput.startsWith("deadline ")) {
-                String[] parts = userInput.substring(9).split(" /by ");
-                String description = parts[0];
-                String by = parts[1];
-                Task newTask = new Deadline(description, by);
-                tasks.add(newTask);
-                printAddedTask(newTask, tasks.size());
-            } else if (userInput.startsWith("event ")) {
-                String[] parts = userInput.substring(6).split(" /from | /to ");
-                String description = parts[0];
-                String from = parts[1];
-                String to = parts[2];
-                Task newTask = new Event(description, from, to);
-                tasks.add(newTask);
-                printAddedTask(newTask, tasks.size());
-            } else if (userInput.startsWith("mark ")) {
-                int taskIdx = Integer.parseInt(userInput.substring(5));
-                if (taskIdx >= 0 && taskIdx < tasks.size()) {
-                    tasks.get(taskIdx - 1).markAsDone();
-                    System.out.println("Nice! I've marked this task as done:");
-                    System.out.println(tasks.get(taskIdx - 1));
-                }
-            } else if (userInput.startsWith("unmark ")) {
-                int taskIdx = Integer.parseInt(userInput.substring(7));
-                if (taskIdx >= 0 && taskIdx < tasks.size()) {
-                    tasks.get(taskIdx - 1).markAsNotDone();
-                    System.out.println("OK, I've marked this task as not done yet:");
-                    System.out.println(tasks.get(taskIdx - 1));
-                }
-            } else {
-                Task newTask = new Task(userInput);
-                tasks.add(newTask);
-                System.out.println("added: " + userInput);
+            } catch (EmptyDescriptionException e) {
+                System.out.println(e.getMessage());
+            } catch (UnknownCommandException e) {
+                System.out.println(e.getMessage());
+            } catch (Exception e) {
+                System.out.println("An unexpected error occurred: " + e.getMessage());
             }
-        }
 
+        }
+    }
+
+    private static void handleListCommand(ArrayList<Task> tasks) {
+        System.out.println("Here are the tasks in your list:");
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println((i + 1) + ". " + tasks.get(i));
+        }
+    }
+
+    private static void handleTodoCommand(ArrayList<Task> tasks, String userInput) throws
+            EmptyDescriptionException {
+        String description = userInput.length() > 4 ? userInput.substring(4).trim() : "";
+        if (description.isEmpty()) {
+            throw new EmptyDescriptionException("todo");
+        }
+        Task newTask = new Todo(description);
+        tasks.add(newTask);
+        printAddedTask(newTask, tasks.size());
+    }
+
+    private static void handleDeadlineCommand(ArrayList<Task> tasks, String userInput) throws
+            EmptyDescriptionException {
+        String[] parts = userInput.substring(8).split(" /by ");
+        if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
+            throw new EmptyDescriptionException("deadline");
+        }
+        Task newTask = new Deadline(parts[0].trim(), parts[1].trim());
+        tasks.add(newTask);
+        printAddedTask(newTask, tasks.size());
+    }
+
+    private static void handleEventCommand(ArrayList<Task> tasks, String userInput) throws
+            EmptyDescriptionException {
+        String[] parts = userInput.substring(5).split(" /from | /to ");
+        if (parts.length < 3 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) {
+            throw new EmptyDescriptionException("event");
+        }
+        Task newTask = new Event(parts[0].trim(), parts[1].trim(), parts[2].trim());
+        tasks.add(newTask);
+        printAddedTask(newTask, tasks.size());
+    }
+
+    private static void handleMarkCommand(ArrayList<Task> tasks, String userInput) {
+        int taskIdx = Integer.parseInt(userInput.substring(5)) - 1;
+        if (taskIdx >= 0 && taskIdx < tasks.size()) {
+            tasks.get(taskIdx).markAsDone();
+            System.out.println("Nice! I've marked this task as done:");
+            System.out.println(tasks.get(taskIdx));
+        } else {
+            System.out.println("Invalid task number. Please enter a valid task number to mark.");
+        }
+    }
+
+    private static void handleUnmarkCommand(ArrayList<Task> tasks, String userInput) {
+        int taskIdx = Integer.parseInt(userInput.substring(7)) - 1;
+        if (taskIdx >= 0 && taskIdx < tasks.size()) {
+            tasks.get(taskIdx).markAsNotDone();
+            System.out.println("OK, I've marked this task as not done yet:");
+            System.out.println(tasks.get(taskIdx));
+        } else {
+            System.out.println("Invalid task number. Please enter a valid task number to unmark.");
+        }
     }
 
     private static void printAddedTask(Task task, int taskCount) {
