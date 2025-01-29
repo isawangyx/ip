@@ -1,4 +1,3 @@
-import exceptions.ChatterBotException;
 import exceptions.UnknownCommandException;
 import exceptions.EmptyDescriptionException;
 
@@ -47,6 +46,8 @@ public class ChatterBot {
             }
 
         }
+
+        sc.close();
     }
 
     private static void handleListCommand(ArrayList<Task> tasks) {
@@ -56,8 +57,7 @@ public class ChatterBot {
         }
     }
 
-    private static void handleTodoCommand(ArrayList<Task> tasks, String userInput) throws
-            EmptyDescriptionException {
+    private static void handleTodoCommand(ArrayList<Task> tasks, String userInput) throws EmptyDescriptionException {
         String description = userInput.length() > 4 ? userInput.substring(4).trim() : "";
         if (description.isEmpty()) {
             throw new EmptyDescriptionException("todo");
@@ -67,8 +67,8 @@ public class ChatterBot {
         printAddedTask(newTask, tasks.size());
     }
 
-    private static void handleDeadlineCommand(ArrayList<Task> tasks, String userInput) throws
-            EmptyDescriptionException {
+    private static void handleDeadlineCommand(ArrayList<Task> tasks, String userInput)
+            throws EmptyDescriptionException {
         String[] parts = userInput.substring(8).split(" /by ");
         if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
             throw new EmptyDescriptionException("deadline");
@@ -78,8 +78,7 @@ public class ChatterBot {
         printAddedTask(newTask, tasks.size());
     }
 
-    private static void handleEventCommand(ArrayList<Task> tasks, String userInput) throws
-            EmptyDescriptionException {
+    private static void handleEventCommand(ArrayList<Task> tasks, String userInput) throws EmptyDescriptionException {
         String[] parts = userInput.substring(5).split(" /from | /to ");
         if (parts.length < 3 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) {
             throw new EmptyDescriptionException("event");
@@ -94,7 +93,7 @@ public class ChatterBot {
         if (taskIdx >= 0 && taskIdx < tasks.size()) {
             tasks.get(taskIdx).markAsDone();
             System.out.println("Nice! I've marked this task as done:");
-            System.out.println(tasks.get(taskIdx));
+            System.out.println("  " + tasks.get(taskIdx));
         } else {
             System.out.println("Invalid task number. Please enter a valid task number to mark.");
         }
@@ -105,7 +104,7 @@ public class ChatterBot {
         if (taskIdx >= 0 && taskIdx < tasks.size()) {
             tasks.get(taskIdx).markAsNotDone();
             System.out.println("OK, I've marked this task as not done yet:");
-            System.out.println(tasks.get(taskIdx));
+            System.out.println("  " + tasks.get(taskIdx));
         } else {
             System.out.println("Invalid task number. Please enter a valid task number to unmark.");
         }
