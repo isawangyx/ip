@@ -1,42 +1,45 @@
 import exceptions.UnknownCommandException;
 import exceptions.EmptyDescriptionException;
-
 import java.util.Scanner;
 import java.util.ArrayList;
 
 public class ChatterBot {
+    private static final String FILE_PATH = "data/chatterbot.txt";
+    private static Storage storage;
+    private static ArrayList<Task> tasks;
+
     public static void main(String[] args) {
+        storage = new Storage(FILE_PATH);
+        tasks = new ArrayList<>(storage.loadTasks());
 
         Scanner sc = new Scanner(System.in);
-        ArrayList<Task> tasks = new ArrayList<>();
-
         System.out.println("Hello! I'm ChatterBot");
         System.out.println("What can I do for you?");
 
         while (true) {
             try {
-                String userInput = sc.nextLine();
-
+                String userInput = sc.nextLine().trim();
                 if (userInput.equals("bye")) {
                     System.out.println("Bye. Hope to see you again soon!");
                     break;
                 } else if (userInput.equals("list")) {
-                    handleListCommand(tasks);
+                    handleListCommand();
                 } else if (userInput.startsWith("todo")) {
-                    handleTodoCommand(tasks, userInput);
+                    handleTodoCommand(userInput);
                 } else if (userInput.startsWith("deadline")) {
-                    handleDeadlineCommand(tasks, userInput);
+                    handleDeadlineCommand(userInput);
                 } else if (userInput.startsWith("event")) {
-                    handleEventCommand(tasks, userInput);
+                    handleEventCommand(userInput);
                 } else if (userInput.startsWith("mark")) {
-                    handleMarkCommand(tasks, userInput);
+                    handleMarkCommand(userInput);
                 } else if (userInput.startsWith("unmark")) {
-                    handleUnmarkCommand(tasks, userInput);
+                    handleUnmarkCommand(userInput);
                 } else if (userInput.startsWith("delete")) {
-                    handleDeleteCommand(tasks, userInput);
+                    handleDeleteCommand(userInput);
                 } else {
                     throw new UnknownCommandException();
                 }
+                storage.saveTasks(tasks);
             } catch (EmptyDescriptionException e) {
                 System.out.println(e.getMessage());
             } catch (UnknownCommandException e) {
@@ -50,14 +53,14 @@ public class ChatterBot {
         sc.close();
     }
 
-    private static void handleListCommand(ArrayList<Task> tasks) {
+    private static void handleListCommand() {
         System.out.println("Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println((i + 1) + ". " + tasks.get(i));
         }
     }
 
-    private static void handleTodoCommand(ArrayList<Task> tasks, String userInput) throws EmptyDescriptionException {
+    private static void handleTodoCommand(String userInput) throws EmptyDescriptionException {
         String description = userInput.length() > 4 ? userInput.substring(4).trim() : "";
         if (description.isEmpty()) {
             throw new EmptyDescriptionException("todo");
@@ -67,7 +70,7 @@ public class ChatterBot {
         printAddedTask(newTask, tasks.size());
     }
 
-    private static void handleDeadlineCommand(ArrayList<Task> tasks, String userInput)
+    private static void handleDeadlineCommand(String userInput)
             throws EmptyDescriptionException {
         String[] parts = userInput.substring(8).split(" /by ");
         if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
@@ -78,7 +81,7 @@ public class ChatterBot {
         printAddedTask(newTask, tasks.size());
     }
 
-    private static void handleEventCommand(ArrayList<Task> tasks, String userInput) throws EmptyDescriptionException {
+    private static void handleEventCommand(String userInput) throws EmptyDescriptionException {
         String[] parts = userInput.substring(5).split(" /from | /to ");
         if (parts.length < 3 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) {
             throw new EmptyDescriptionException("event");
@@ -88,7 +91,7 @@ public class ChatterBot {
         printAddedTask(newTask, tasks.size());
     }
 
-    private static void handleMarkCommand(ArrayList<Task> tasks, String userInput) {
+    private static void handleMarkCommand(String userInput) {
         int taskIdx = Integer.parseInt(userInput.substring(5)) - 1;
         if (taskIdx >= 0 && taskIdx < tasks.size()) {
             tasks.get(taskIdx).markAsDone();
@@ -99,7 +102,7 @@ public class ChatterBot {
         }
     }
 
-    private static void handleUnmarkCommand(ArrayList<Task> tasks, String userInput) {
+    private static void handleUnmarkCommand(String userInput) {
         int taskIdx = Integer.parseInt(userInput.substring(7)) - 1;
         if (taskIdx >= 0 && taskIdx < tasks.size()) {
             tasks.get(taskIdx).markAsNotDone();
@@ -116,7 +119,7 @@ public class ChatterBot {
         System.out.println("Now you have " + taskCount + " tasks in the list.");
     }
 
-    private static void handleDeleteCommand(ArrayList<Task> tasks, String userInput) {
+    private static void handleDeleteCommand(String userInput) {
         try {
             int taskIdx = Integer.parseInt(userInput.substring(7).trim()) - 1;
             if (taskIdx >= 0 && taskIdx < tasks.size()) {
