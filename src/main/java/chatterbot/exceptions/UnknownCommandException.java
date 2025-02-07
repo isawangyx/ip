@@ -1,4 +1,4 @@
-package exceptions;
+package chatterbot.exceptions;
 
 public class UnknownCommandException extends ChatterBotException {
     public UnknownCommandException() {

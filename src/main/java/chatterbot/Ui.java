@@ -1,3 +1,6 @@
+package chatterbot;
+
+import chatterbot.tasks.Task;
 import java.util.Scanner;
 
 public class Ui {
@@ -26,6 +29,12 @@ public class Ui {
 
     public void showMessage(String message) {
         System.out.println(message);
+    }
+
+    public void printAddedTask(Task task, int taskCount) {
+        System.out.println("Got it. I've added this task:");
+        System.out.println("  " + task);
+        System.out.println("Now you have " + taskCount + " tasks in the list.");
     }
 }
 

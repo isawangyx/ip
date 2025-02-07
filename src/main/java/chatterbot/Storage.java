@@ -1,3 +1,6 @@
+package chatterbot;
+
+import chatterbot.tasks.Task;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +24,7 @@ public class Storage {
             }
             writer.close();
         } catch (IOException e) {
-            System.out.println("Error saving tasks: " + e.getMessage());
+            System.out.println("Error saving chatterbot.tasks: " + e.getMessage());
         }
     }
 
@@ -42,7 +45,7 @@ public class Storage {
             }
             reader.close();
         } catch (IOException e) {
-            System.out.println("Error loading tasks: " + e.getMessage());
+            System.out.println("Error loading chatterbot.tasks: " + e.getMessage());
         }
         return tasks;
     }

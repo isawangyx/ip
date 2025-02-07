@@ -1,3 +1,7 @@
+package chatterbot.tasks;
+
+import chatterbot.Ui;
+
 import java.util.ArrayList;
 import java.util.List;
 

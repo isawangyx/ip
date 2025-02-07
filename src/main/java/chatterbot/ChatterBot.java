@@ -1,5 +1,8 @@
-import exceptions.UnknownCommandException;
-import exceptions.EmptyDescriptionException;
+package chatterbot;
+
+import chatterbot.exceptions.UnknownCommandException;
+import chatterbot.exceptions.EmptyDescriptionException;
+import chatterbot.tasks.TaskList;
 
 public class ChatterBot {
     private static final String FILE_PATH = "data/chatterbot.txt";

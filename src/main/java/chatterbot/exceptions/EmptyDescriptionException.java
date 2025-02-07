@@ -1,4 +1,4 @@
-package exceptions;
+package chatterbot.exceptions;
 
 public class EmptyDescriptionException extends ChatterBotException {
     public EmptyDescriptionException(String type) {
