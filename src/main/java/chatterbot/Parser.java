@@ -4,6 +4,8 @@ import chatterbot.exceptions.UnknownCommandException;
 import chatterbot.exceptions.EmptyDescriptionException;
 import chatterbot.tasks.*;
 
+import java.util.List;
+
 public class Parser {
     public static boolean handleCommand(String userInput, TaskList tasks, Ui ui, Storage storage)
             throws EmptyDescriptionException, UnknownCommandException {
@@ -25,6 +27,8 @@ public class Parser {
             handleUnmarkCommand(userInput, tasks, ui);
         } else if (userInput.startsWith("delete")) {
             handleDeleteCommand(userInput, tasks, ui);
+        } else if (userInput.startsWith("find")) {
+            handleFindCommand(userInput, tasks, ui);
         } else {
             throw new UnknownCommandException();
         }
@@ -84,4 +88,14 @@ public class Parser {
             System.out.println("Please specify a valid task number to delete.");
         }
     }
+
+    private static void handleFindCommand(String userInput, TaskList tasks, Ui ui) throws EmptyDescriptionException {
+        String keyword = userInput.substring(4).trim();
+        if (keyword.isEmpty()) {
+            throw new EmptyDescriptionException("find");
+        }
+        List<Task> matchingTasks = tasks.findTasks(keyword);
+        ui.showMatchingTasks(matchingTasks);
+    }
+
 }
