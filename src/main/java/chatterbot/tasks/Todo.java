@@ -12,6 +12,6 @@ public class Todo extends Task {
 
     @Override
     public String toFileFormat() {
-        return "T | " + getStatusIcon() + " | " + description;
+        return "T | " + (isDone ? "1" : "0") + " | " + description;
     }
 }
