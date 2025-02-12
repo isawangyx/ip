@@ -23,10 +23,6 @@ public class Ui {
         System.out.println("Bye. Hope to see you again soon!");
     }
 
-    public void showError(String message) {
-        System.out.println("Error: " + message);
-    }
-
     public void showMessage(String message) {
         System.out.println(message);
     }

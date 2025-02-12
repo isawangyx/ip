@@ -16,12 +16,15 @@ public class Event extends Task {
 
     @Override
     public String toFileFormat() {
-        return "E | " + (isDone ? "1" : "0") + " | " + description + " | " + from.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm")) + " | " + to.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
+        return "E | " + (isDone ? "1" : "0") + " | " + description
+                + " | " + from.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"))
+                + " | " + to.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
     }
 
     @Override
     public String toString() {
         DateTimeFormatter displayFormat = DateTimeFormatter.ofPattern("MMM dd yyyy, h:mm a");
-        return "[E]" + super.toString() + " (from: " + from.format(displayFormat) + " to: " + to.format(displayFormat) + ")";
+        return "[E]" + super.toString() + " (from: " + from.format(displayFormat)
+                + " to: " + to.format(displayFormat) + ")";
     }
 }

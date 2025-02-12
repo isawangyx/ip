@@ -18,22 +18,22 @@ public abstract class Task {
         String description = parts[2];
 
         switch (type) {
-            case "T":
-                Task todo = new Todo(description);
-                if (isDone) todo.markAsDone();
-                return todo;
-            case "D":
-                if (parts.length < 4) return null;
-                Task deadline = new Deadline(description, parts[3]);
-                if (isDone) deadline.markAsDone();
-                return deadline;
-            case "E":
-                if (parts.length < 5) return null;
-                Task event = new Event(description, parts[3], parts[4]);
-                if (isDone) event.markAsDone();
-                return event;
-            default:
-                return null;
+        case "T":
+            Task todo = new Todo(description);
+            if (isDone) todo.markAsDone();
+            return todo;
+        case "D":
+            if (parts.length < 4) return null;
+            Task deadline = new Deadline(description, parts[3]);
+            if (isDone) deadline.markAsDone();
+            return deadline;
+        case "E":
+            if (parts.length < 5) return null;
+            Task event = new Event(description, parts[3], parts[4]);
+            if (isDone) event.markAsDone();
+            return event;
+        default:
+            return null;
         }
     }
 
