@@ -5,13 +5,26 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles reading and writing tasks to a file for persistence.
+ */
 public class Storage {
     private final String filePath;
 
+    /**
+     * Constructs a Storage instance.
+     *
+     * @param filePath The path of the file used for storage.
+     */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
 
+    /**
+     * Saves the current list of tasks to the storage file.
+     *
+     * @param tasks The list of tasks to save.
+     */
     public void saveTasks(List<Task> tasks) {
         try {
             File file = new File(filePath);
@@ -28,6 +41,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Loads tasks from the storage file.
+     *
+     * @return A list of tasks loaded from the file.
+     */
     public List<Task> loadTasks() {
         List<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
