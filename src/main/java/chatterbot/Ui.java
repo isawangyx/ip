@@ -42,15 +42,6 @@ public class Ui {
     }
 
     /**
-     * Displays an error message.
-     *
-     * @param message The error message to display.
-     */
-    public void showError(String message) {
-        System.out.println("Error: " + message);
-    }
-
-    /**
      * Displays a message.
      *
      * @param message The message to display.
