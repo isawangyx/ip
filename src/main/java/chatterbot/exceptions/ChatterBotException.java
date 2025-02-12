@@ -5,3 +5,4 @@ public class ChatterBotException extends Exception {
         super(message);
     }
 }
+

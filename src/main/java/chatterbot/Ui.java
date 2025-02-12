@@ -1,9 +1,9 @@
 package chatterbot;
 
-import chatterbot.tasks.Task;
-
 import java.util.List;
 import java.util.Scanner;
+
+import chatterbot.tasks.Task;
 
 /**
  * Handles interactions with the user.

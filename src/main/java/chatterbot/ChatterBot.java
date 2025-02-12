@@ -1,7 +1,7 @@
 package chatterbot;
 
-import chatterbot.exceptions.UnknownCommandException;
 import chatterbot.exceptions.EmptyDescriptionException;
+import chatterbot.exceptions.UnknownCommandException;
 import chatterbot.tasks.TaskList;
 
 /**
