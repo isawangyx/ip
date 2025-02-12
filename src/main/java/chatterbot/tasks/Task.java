@@ -28,7 +28,9 @@ public abstract class Task {
      */
     public static Task fromFileFormat(String line) {
         String[] parts = line.split(" \\| ");
-        if (parts.length < 3) return null;
+        if (parts.length < 3) {
+            return null;
+        }
 
         String type = parts[0];
         boolean isDone = parts[1].equals("1");
@@ -37,17 +39,27 @@ public abstract class Task {
         switch (type) {
         case "T":
             Task todo = new Todo(description);
-            if (isDone) todo.markAsDone();
+            if (isDone) {
+                todo.markAsDone();
+            }
             return todo;
         case "D":
-            if (parts.length < 4) return null;
+            if (parts.length < 4) {
+                return null;
+            }
             Task deadline = new Deadline(description, parts[3]);
-            if (isDone) deadline.markAsDone();
+            if (isDone) {
+                deadline.markAsDone();
+            }
             return deadline;
         case "E":
-            if (parts.length < 5) return null;
+            if (parts.length < 5) {
+                return null;
+            }
             Task event = new Event(description, parts[3], parts[4]);
-            if (isDone) event.markAsDone();
+            if (isDone) {
+                event.markAsDone();
+            }
             return event;
         default:
             return null;

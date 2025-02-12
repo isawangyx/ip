@@ -1,10 +1,10 @@
 package chatterbot;
 
-import chatterbot.exceptions.UnknownCommandException;
-import chatterbot.exceptions.EmptyDescriptionException;
-import chatterbot.tasks.*;
-
 import java.util.List;
+
+import chatterbot.exceptions.EmptyDescriptionException;
+import chatterbot.exceptions.UnknownCommandException;
+import chatterbot.tasks.*;
 
 /**
  * Parses user commands and executes the appropriate actions.
@@ -14,12 +14,12 @@ public class Parser {
      * Processes the user command and executes the corresponding action.
      *
      * @param userInput The user's command input.
-     * @param tasks The task list to be modified.
-     * @param ui The user interface to display messages.
-     * @param storage The storage system to save tasks.
+     * @param tasks     The task list to be modified.
+     * @param ui        The user interface to display messages.
+     * @param storage   The storage system to save tasks.
      * @return {@code true} if the chatbot should continue running, {@code false} if it should exit.
      * @throws EmptyDescriptionException If the command requires a description but none is provided.
-     * @throws UnknownCommandException If the command is not recognized.
+     * @throws UnknownCommandException   If the command is not recognized.
      */
     public static boolean handleCommand(String userInput, TaskList tasks, Ui ui, Storage storage)
             throws EmptyDescriptionException, UnknownCommandException {
@@ -54,8 +54,8 @@ public class Parser {
      * Handles the creation of a new ToDo task.
      *
      * @param userInput The full user command input.
-     * @param tasks The task list to add the ToDo task to.
-     * @param ui The user interface for displaying messages.
+     * @param tasks     The task list to add the ToDo task to.
+     * @param ui        The user interface for displaying messages.
      * @throws EmptyDescriptionException If the ToDo description is empty.
      */
     private static void handleTodoCommand(String userInput, TaskList tasks, Ui ui) throws EmptyDescriptionException {
@@ -72,11 +72,12 @@ public class Parser {
      * Handles the creation of a new Deadline task.
      *
      * @param userInput The full user command input.
-     * @param tasks The task list to add the Deadline task to.
-     * @param ui The user interface for displaying messages.
+     * @param tasks     The task list to add the Deadline task to.
+     * @param ui        The user interface for displaying messages.
      * @throws EmptyDescriptionException If the Deadline description or date is empty.
      */
-    private static void handleDeadlineCommand(String userInput, TaskList tasks, Ui ui) throws EmptyDescriptionException {
+    private static void handleDeadlineCommand(String userInput, TaskList tasks, Ui ui)
+            throws EmptyDescriptionException {
         String[] parts = userInput.substring(8).split(" /by ");
         if (parts.length < 2) {
             throw new EmptyDescriptionException("deadline");
@@ -90,8 +91,8 @@ public class Parser {
      * Handles the creation of a new Event task.
      *
      * @param userInput The full user command input.
-     * @param tasks The task list to add the Event task to.
-     * @param ui The user interface for displaying messages.
+     * @param tasks     The task list to add the Event task to.
+     * @param ui        The user interface for displaying messages.
      * @throws EmptyDescriptionException If the Event description, start time, or end time is missing.
      */
     private static void handleEventCommand(String userInput, TaskList tasks, Ui ui) throws EmptyDescriptionException {
@@ -108,8 +109,8 @@ public class Parser {
      * Handles marking a task as done.
      *
      * @param userInput The full user command input.
-     * @param tasks The task list containing the tasks.
-     * @param ui The user interface for displaying messages.
+     * @param tasks     The task list containing the tasks.
+     * @param ui        The user interface for displaying messages.
      */
     private static void handleMarkCommand(String userInput, TaskList tasks, Ui ui) {
         int taskIdx = Integer.parseInt(userInput.substring(5)) - 1;
@@ -121,8 +122,8 @@ public class Parser {
      * Handles unmarking a task (marking it as not done).
      *
      * @param userInput The full user command input.
-     * @param tasks The task list containing the tasks.
-     * @param ui The user interface for displaying messages.
+     * @param tasks     The task list containing the tasks.
+     * @param ui        The user interface for displaying messages.
      */
     private static void handleUnmarkCommand(String userInput, TaskList tasks, Ui ui) {
         int taskIdx = Integer.parseInt(userInput.substring(7)) - 1;
@@ -134,15 +135,15 @@ public class Parser {
      * Handles deleting a task from the task list.
      *
      * @param userInput The full user command input.
-     * @param tasks The task list from which the task should be removed.
-     * @param ui The user interface for displaying messages.
+     * @param tasks     The task list from which the task should be removed.
+     * @param ui        The user interface for displaying messages.
      */
     private static void handleDeleteCommand(String userInput, TaskList tasks, Ui ui) {
         try {
             int taskIdx = Integer.parseInt(userInput.substring(7)) - 1;
             Task removedTask = tasks.removeTask(taskIdx);
-            ui.showMessage("Noted. I've removed this task:\n  " + removedTask +
-                    "\nNow you have " + tasks.size() + " tasks in the list.");
+            ui.showMessage("Noted. I've removed this task:\n  " + removedTask
+                    + "\nNow you have " + tasks.size() + " tasks in the list.");
         } catch (NumberFormatException e) {
             System.out.println("Please specify a valid task number to delete.");
         }

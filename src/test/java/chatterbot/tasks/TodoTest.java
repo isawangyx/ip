@@ -1,8 +1,10 @@
-package chatterbot.tasks;  //same package as the class being tested
-
-import org.junit.jupiter.api.Test;
+package chatterbot.tasks; //same package as the class being tested
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 public class TodoTest {
 
@@ -10,22 +12,22 @@ public class TodoTest {
     public void testTodoCreation() {
         Todo task = new Todo("Read book");
         assertEquals("Read book", task.description);
-        assertEquals(false, task.isDone);
+        assertFalse(task.isDone);
     }
 
     @Test
     public void testMarkAsDone() {
         Todo task = new Todo("Read book");
         task.markAsDone();
-        assertEquals(true, task.isDone);
+        assertTrue(task.isDone);
     }
 
     @Test
     public void testMarkAsNotDone() {
         Todo task = new Todo("Read book");
-        task.markAsDone();  // Mark as done first
+        task.markAsDone(); // Mark as done first
         task.markAsNotDone();
-        assertEquals(false, task.isDone);
+        assertFalse(task.isDone);
     }
 
     @Test

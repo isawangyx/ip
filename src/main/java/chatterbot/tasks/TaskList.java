@@ -1,9 +1,9 @@
 package chatterbot.tasks;
 
-import chatterbot.Ui;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import chatterbot.Ui;
 
 /**
  * Manages a list of tasks and provides methods to add, remove, and modify tasks.
