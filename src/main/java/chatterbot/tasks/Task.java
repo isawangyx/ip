@@ -5,6 +5,10 @@ package chatterbot.tasks;
  * This is an abstract class meant to be extended by specific task types.
  */
 public abstract class Task {
+    private static final String TODO_TYPE = "T";
+    private static final String DEADLINE_TYPE = "D";
+    private static final String EVENT_TYPE = "E";
+
     protected String description;
     protected boolean isDone;
 
@@ -36,34 +40,30 @@ public abstract class Task {
         boolean isDone = parts[1].equals("1");
         String description = parts[2];
 
+        Task task;
         switch (type) {
-        case "T":
-            Task todo = new Todo(description);
-            if (isDone) {
-                todo.markAsDone();
-            }
-            return todo;
-        case "D":
+        case TODO_TYPE:
+            task = new Todo(description);
+            break;
+        case DEADLINE_TYPE:
             if (parts.length < 4) {
                 return null;
             }
-            Task deadline = new Deadline(description, parts[3]);
-            if (isDone) {
-                deadline.markAsDone();
-            }
-            return deadline;
-        case "E":
+            task = new Deadline(description, parts[3]);
+            break;
+        case EVENT_TYPE:
             if (parts.length < 5) {
                 return null;
             }
-            Task event = new Event(description, parts[3], parts[4]);
-            if (isDone) {
-                event.markAsDone();
-            }
-            return event;
+            task = new Event(description, parts[3], parts[4]);
+            break;
         default:
             return null;
         }
+        if (isDone) {
+            task.markAsDone();
+        }
+        return task;
     }
 
     /**
