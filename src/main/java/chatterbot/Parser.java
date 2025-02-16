@@ -149,13 +149,31 @@ public class Parser {
         }
     }
 
+    /**
+     * Handles the "find" command by searching for tasks containing the specified keyword.
+     * If no matching tasks are found, an appropriate message is displayed.
+     *
+     * @param userInput The full user command input containing the search keyword.
+     * @param tasks     The task list to search for matching tasks.
+     * @param ui        The user interface for displaying search results.
+     * @throws EmptyDescriptionException If the keyword is empty or not provided.
+     */
     private static void handleFindCommand(String userInput, TaskList tasks, Ui ui) throws EmptyDescriptionException {
         String keyword = userInput.substring(4).trim();
         if (keyword.isEmpty()) {
             throw new EmptyDescriptionException("find");
         }
-        List<Task> matchingTasks = tasks.findTasks(keyword);
-        ui.showMatchingTasks(matchingTasks);
-    }
 
+        List<Task> matchingTasks = tasks.findTasks(keyword);
+
+        if (matchingTasks.isEmpty()) {
+            ui.showMessage("No matching tasks found.");
+        } else {
+            StringBuilder sb = new StringBuilder("Here are the matching tasks in your list:\n");
+            for (int i = 0; i < matchingTasks.size(); i++) {
+                sb.append(i + 1).append(". ").append(matchingTasks.get(i)).append("\n");
+            }
+            ui.showMessage(sb.toString().trim());
+        }
+    }
 }
