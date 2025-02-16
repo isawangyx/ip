@@ -2,6 +2,7 @@ package chatterbot.tasks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import chatterbot.Ui;
 
@@ -101,14 +102,16 @@ public class TaskList {
     public void printTasks(Ui ui) {
         if (tasks.isEmpty()) {
             ui.showMessage("Your task list is empty!");
-        } else {
-            StringBuilder sb = new StringBuilder("Here are the tasks in your list:\n");
-            for (int i = 0; i < tasks.size(); i++) {
-                sb.append(i + 1).append(". ").append(tasks.get(i)).append("\n");
-            }
-            ui.showMessage(sb.toString().trim()); // Ensure the GUI updates
+            return;
         }
+
+        String taskList = tasks.stream()
+                .map(task -> (tasks.indexOf(task) + 1) + ". " + task)
+                .collect(Collectors.joining("\n"));
+
+        ui.showMessage("Here are the tasks in your list:\n" + taskList);
     }
+
 
     /**
      * Finds and returns a list of tasks that contain the given keyword.
@@ -117,13 +120,9 @@ public class TaskList {
      * @return A list of tasks matching the keyword.
      */
     public List<Task> findTasks(String keyword) {
-        List<Task> matchingTasks = new ArrayList<>();
-        for (Task task : tasks) {
-            if (task.description.toLowerCase().contains(keyword.toLowerCase())) {
-                matchingTasks.add(task);
-            }
-        }
-        return matchingTasks;
+        return tasks.stream()
+                .filter(task -> task.description.toLowerCase().contains(keyword.toLowerCase()))
+                .collect(Collectors.toList());
     }
 
 }

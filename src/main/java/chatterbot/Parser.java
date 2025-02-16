@@ -1,6 +1,7 @@
 package chatterbot;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import chatterbot.exceptions.EmptyDescriptionException;
 import chatterbot.exceptions.UnknownCommandException;
@@ -184,22 +185,18 @@ public class Parser {
      * @param ui        The user interface for displaying search results.
      * @throws EmptyDescriptionException If the keyword is empty or not provided.
      */
-    private static void handleFindCommand(String userInput, TaskList tasks, Ui ui) throws EmptyDescriptionException {
+    private static void handleFindCommand(String userInput, TaskList tasks, Ui ui)
+            throws EmptyDescriptionException {
         String keyword = userInput.substring(4).trim();
         if (keyword.isEmpty()) {
             throw new EmptyDescriptionException("find");
         }
 
-        List<Task> matchingTasks = tasks.findTasks(keyword);
+        String matchingTasks = tasks.findTasks(keyword).stream()
+                .map(task -> (tasks.getAllTasks().indexOf(task) + 1) + ". " + task)
+                .collect(Collectors.joining("\n"));
 
-        if (matchingTasks.isEmpty()) {
-            ui.showMessage("No matching tasks found.");
-        } else {
-            StringBuilder sb = new StringBuilder("Here are the matching tasks in your list:\n");
-            for (int i = 0; i < matchingTasks.size(); i++) {
-                sb.append(i + 1).append(". ").append(matchingTasks.get(i)).append("\n");
-            }
-            ui.showMessage(sb.toString().trim());
-        }
+        ui.showMessage(matchingTasks.isEmpty() ? "No matching tasks found."
+                : "Here are the matching tasks in your list:\n" + matchingTasks);
     }
 }
