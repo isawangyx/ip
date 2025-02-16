@@ -10,6 +10,7 @@ import chatterbot.tasks.*;
  * Parses user commands and executes the appropriate actions.
  */
 public class Parser {
+
     /**
      * Processes the user command and executes the corresponding action.
      *
@@ -24,26 +25,51 @@ public class Parser {
     public static boolean handleCommand(String userInput, TaskList tasks, Ui ui, Storage storage)
             throws EmptyDescriptionException, UnknownCommandException {
 
-        if (userInput.equals("bye")) {
+        // Extract the command keyword from the input
+        String[] parts = userInput.split(" ", 2);
+        String commandString = parts[0];
+
+        CommandType command = CommandType.fromString(commandString);
+
+        switch (command) {
+        case BYE:
             ui.showExitMessage();
             return false;
-        } else if (userInput.equals("list")) {
+
+        case LIST:
             tasks.printTasks(ui);
-        } else if (userInput.startsWith("todo")) {
+            break;
+
+        case TODO:
             handleTodoCommand(userInput, tasks, ui);
-        } else if (userInput.startsWith("deadline")) {
+            break;
+
+        case DEADLINE:
             handleDeadlineCommand(userInput, tasks, ui);
-        } else if (userInput.startsWith("event")) {
+            break;
+
+        case EVENT:
             handleEventCommand(userInput, tasks, ui);
-        } else if (userInput.startsWith("mark")) {
+            break;
+
+        case MARK:
             handleMarkCommand(userInput, tasks, ui);
-        } else if (userInput.startsWith("unmark")) {
+            break;
+
+        case UNMARK:
             handleUnmarkCommand(userInput, tasks, ui);
-        } else if (userInput.startsWith("delete")) {
+            break;
+
+        case DELETE:
             handleDeleteCommand(userInput, tasks, ui);
-        } else if (userInput.startsWith("find")) {
+            break;
+
+        case FIND:
             handleFindCommand(userInput, tasks, ui);
-        } else {
+            break;
+
+        case UNKNOWN:
+        default:
             throw new UnknownCommandException();
         }
 
