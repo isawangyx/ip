@@ -32,6 +32,9 @@ public class Storage {
      * @param tasks The list of tasks to save.
      */
     public void saveTasks(List<Task> tasks) {
+        assert filePath != null : "File path for storage cannot be null";
+        assert tasks != null : "Task list to be saved cannot be null";
+
         try {
             File file = new File(filePath);
             file.getParentFile().mkdirs(); // Create directory if it doesn’t exist
@@ -53,6 +56,8 @@ public class Storage {
      * @return A list of tasks loaded from the file.
      */
     public List<Task> loadTasks() {
+        assert filePath != null : "File path for storage cannot be null";
+
         List<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
         if (!file.exists()) {
