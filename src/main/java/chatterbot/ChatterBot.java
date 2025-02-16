@@ -26,34 +26,20 @@ public class ChatterBot {
     }
 
     /**
-     * Runs the chatbot, continuously accepting user input.
-     */
-    public void run() {
-        ui.showWelcomeMessage();
-        boolean isRunning = true;
-
-        while (isRunning) {
-            try {
-                String userInput = ui.readCommand();
-                isRunning = Parser.handleCommand(userInput, tasks, ui, storage);
-                storage.saveTasks(tasks.getAllTasks());
-            } catch (EmptyDescriptionException e) {
-                ui.showMessage(e.getMessage());
-            } catch (UnknownCommandException e) {
-                ui.showMessage(e.getMessage());
-            } catch (Exception e) {
-                ui.showMessage("An unexpected error occurred: " + e.getMessage());
-            }
-        }
-    }
-
-    /**
-     * The main entry point of the chatbot application.
-     * Initializes and runs ChatterBot.
+     * Generates a response for the user's chat message.
      *
-     * @param args Command-line arguments (not used).
+     * @param input The user input string.
+     * @return The chatbot's response.
      */
-    public static void main(String[] args) {
-        new ChatterBot().run();
+    public String getResponse(String input) {
+        try {
+            boolean shouldContinue = Parser.handleCommand(input, tasks, ui, storage);
+            storage.saveTasks(tasks.getAllTasks());
+            return ui.getLastMessage();
+        } catch (EmptyDescriptionException | UnknownCommandException e) {
+            return e.getMessage();
+        } catch (Exception e) {
+            return "An unexpected error occurred: " + e.getMessage();
+        }
     }
 }
