@@ -48,12 +48,20 @@ public class ChatterBot {
     }
 
     /**
+     * Generates a response for the user's chat message.
+     */
+    public String getResponse(String input) {
+        return "Duke heard: " + input;
+    }
+
+    /**
      * The main entry point of the chatbot application.
      * Initializes and runs ChatterBot.
      *
      * @param args Command-line arguments (not used).
      */
     public static void main(String[] args) {
-        new ChatterBot().run();
+//        new ChatterBot().run();
+        System.out.println("Hello");
     }
 }
