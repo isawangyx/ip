@@ -102,10 +102,11 @@ public class TaskList {
         if (tasks.isEmpty()) {
             ui.showMessage("Your task list is empty!");
         } else {
-            ui.showMessage("Here are the tasks in your list:");
+            StringBuilder sb = new StringBuilder("Here are the tasks in your list:\n");
             for (int i = 0; i < tasks.size(); i++) {
-                ui.showMessage((i + 1) + ". " + tasks.get(i));
+                sb.append(i + 1).append(". ").append(tasks.get(i)).append("\n");
             }
+            ui.showMessage(sb.toString().trim()); // Ensure the GUI updates
         }
     }
 

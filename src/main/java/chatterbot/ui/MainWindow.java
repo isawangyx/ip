@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+
 /**
  * Controller for the main GUI.
  */
@@ -34,6 +35,9 @@ public class MainWindow extends AnchorPane {
     /** Injects the ChatterBot instance */
     public void setChatterBot(ChatterBot c) {
         chatterbot = c;
+
+        String welcomeMessage = "Hello! I'm ChatterBot\nWhat can I do for you?";
+        dialogContainer.getChildren().add(DialogBox.getChatterBotDialog(welcomeMessage, chatterbotImage));
     }
 
     /**
