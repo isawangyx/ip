@@ -69,6 +69,10 @@ public class Parser {
             handleFindCommand(userInput, tasks, ui);
             break;
 
+        case FREE:
+            handleFreeCommand(userInput, tasks, ui);
+            break;
+
         case UNKNOWN:
         default:
             throw new UnknownCommandException();
@@ -88,7 +92,7 @@ public class Parser {
     private static void handleTodoCommand(String userInput, TaskList tasks, Ui ui) throws EmptyDescriptionException {
         String description = userInput.substring(4).trim();
         if (description.isEmpty()) {
-            throw new EmptyDescriptionException("todo");
+            throw new EmptyDescriptionException("todo <desc>");
         }
         Task newTask = new Todo(description);
         tasks.addTask(newTask);
@@ -107,7 +111,7 @@ public class Parser {
             throws EmptyDescriptionException {
         String[] parts = userInput.substring(8).split(" /by ");
         if (parts.length < 2) {
-            throw new EmptyDescriptionException("deadline");
+            throw new EmptyDescriptionException("deadline <desc> /by <date>");
         }
         Task newTask = new Deadline(parts[0].trim(), parts[1].trim());
         tasks.addTask(newTask);
@@ -125,7 +129,7 @@ public class Parser {
     private static void handleEventCommand(String userInput, TaskList tasks, Ui ui) throws EmptyDescriptionException {
         String[] parts = userInput.substring(5).split(" /from | /to ");
         if (parts.length < 3) {
-            throw new EmptyDescriptionException("event");
+            throw new EmptyDescriptionException("event <desc> /from <start> /to <end>");
         }
         Task newTask = new Event(parts[0].trim(), parts[1].trim(), parts[2].trim());
         tasks.addTask(newTask);
@@ -198,5 +202,29 @@ public class Parser {
 
         ui.showMessage(matchingTasks.isEmpty() ? "No matching tasks found."
                 : "Here are the matching tasks in your list:\n" + matchingTasks);
+    }
+
+    /**
+     * Handles the "free" command to find an available time slot of the specified duration.
+     *
+     * @param userInput The user's command input.
+     * @param tasks     The task list to check for free time slots.
+     * @param ui        The user interface to display messages.
+     */
+    private static void handleFreeCommand(String userInput, TaskList tasks, Ui ui) {
+        try {
+            String[] parts = userInput.split(" ");
+            if (parts.length < 2 || !parts[1].endsWith("h")) {
+                ui.showMessage("Invalid format! Use: free <hours> (e.g., free 4h)");
+                return;
+            }
+
+            int hours = Integer.parseInt(parts[1].replace("h", ""));
+            String freeSlot = tasks.findFreeTime(hours);
+            ui.showMessage(freeSlot);
+
+        } catch (NumberFormatException e) {
+            ui.showMessage("Invalid number format! Use: free <hours> (e.g., free 4h)");
+        }
     }
 }

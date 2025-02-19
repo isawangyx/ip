@@ -1,7 +1,7 @@
 package chatterbot;
 
 public enum CommandType {
-    BYE, LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE, FIND, UNKNOWN;
+    BYE, LIST, TODO, DEADLINE, EVENT, MARK, UNMARK, DELETE, FIND, FREE, UNKNOWN;
 
     /**
      * Parses a command string and returns the corresponding CommandType.
