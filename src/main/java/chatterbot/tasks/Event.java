@@ -14,6 +14,24 @@ public class Event extends Task {
         this.to = LocalDateTime.parse(to, formatter);
     }
 
+    /**
+     * Returns the start time of the event.
+     *
+     * @return The start time as a LocalDateTime object.
+     */
+    public LocalDateTime getStartTime() {
+        return from;
+    }
+
+    /**
+     * Returns the end time of the event.
+     *
+     * @return The end time as a LocalDateTime object.
+     */
+    public LocalDateTime getEndTime() {
+        return to;
+    }
+
     @Override
     public String toFileFormat() {
         return "E | " + (isDone ? "1" : "0") + " | " + description
