@@ -111,7 +111,7 @@ public class Parser {
             throws EmptyDescriptionException {
         String[] parts = userInput.substring(8).split(" /by ");
         if (parts.length < 2) {
-            throw new EmptyDescriptionException("deadline <desc> /by <date yyyy-MM-dd>");
+            throw new EmptyDescriptionException("deadline <desc> /by <date yyyy-MM-dd HHmm>");
         }
         Task newTask = new Deadline(parts[0].trim(), parts[1].trim());
         tasks.addTask(newTask);
