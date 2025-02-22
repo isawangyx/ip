@@ -111,7 +111,7 @@ public class Parser {
             throws EmptyDescriptionException {
         String[] parts = userInput.substring(8).split(" /by ");
         if (parts.length < 2) {
-            throw new EmptyDescriptionException("deadline <desc> /by <date>");
+            throw new EmptyDescriptionException("deadline <desc> /by <date yyyy-MM-dd>");
         }
         Task newTask = new Deadline(parts[0].trim(), parts[1].trim());
         tasks.addTask(newTask);
@@ -129,7 +129,7 @@ public class Parser {
     private static void handleEventCommand(String userInput, TaskList tasks, Ui ui) throws EmptyDescriptionException {
         String[] parts = userInput.substring(5).split(" /from | /to ");
         if (parts.length < 3) {
-            throw new EmptyDescriptionException("event <desc> /from <start> /to <end>");
+            throw new EmptyDescriptionException("event <desc> /from <start yyyy-MM-dd HHmm> /to <end yyyy-MM-dd HHmm>");
         }
         Task newTask = new Event(parts[0].trim(), parts[1].trim(), parts[2].trim());
         tasks.addTask(newTask);
