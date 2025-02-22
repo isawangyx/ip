@@ -138,7 +138,6 @@ public class TaskList {
      * @return A string representing the nearest free time slot.
      */
     public String findFreeTime(int durationInHours) {
-        // Collect all events
         List<Event> events = new ArrayList<>();
         for (Task task : tasks) {
             if (task instanceof Event) {
@@ -147,14 +146,23 @@ public class TaskList {
         }
         events.sort(Comparator.comparing(Event::getStartTime));
 
-        // Define working hours from 8 AM to 10 PM
-        LocalDateTime now = LocalDateTime.now();  // ✅ Use real current time
-        LocalDateTime searchStart = now.truncatedTo(ChronoUnit.DAYS).plusHours(8);
-        for (int dayOffset = 0; dayOffset < 7; dayOffset++) {  // Check next 7 days
-            LocalDateTime startOfDay = searchStart.plusDays(dayOffset);
-            LocalDateTime endOfDay = startOfDay.plusHours(14); // Ends at 10 PM
+        LocalDateTime now = LocalDateTime.now().withSecond(0).withNano(0);
 
-            LocalDateTime lastEndTime = startOfDay; // Reset start for each day
+        for (int dayOffset = 0; dayOffset < 7; dayOffset++) {  // Check next 7 days
+            LocalDateTime searchStart = now.plusDays(dayOffset);
+
+            // Define working hours from 8 AM to 10 PM
+            LocalDateTime startOfDay = searchStart.withHour(8).withMinute(0);
+            LocalDateTime endOfDay = searchStart.withHour(22).withMinute(0);
+
+            // If it's today, start from current time; otherwise, from 8 AM
+            if (dayOffset == 0 && now.isAfter(startOfDay) && now.isBefore(endOfDay)) {
+                searchStart = now;
+            } else {
+                searchStart = startOfDay;
+            }
+
+            LocalDateTime lastEndTime = searchStart;
 
             for (Event event : events) {
                 LocalDateTime start = event.getStartTime();
@@ -165,15 +173,14 @@ public class TaskList {
                     continue;
                 }
 
-                // Check if there's a free slot before this event
-                if (ChronoUnit.HOURS.between(lastEndTime, start) >= durationInHours) {
+                if (ChronoUnit.HOURS.between(lastEndTime, start) >= durationInHours
+                        && lastEndTime.plusHours(durationInHours).isBefore(endOfDay)) {
                     return formatFreeSlot(lastEndTime, durationInHours);
                 }
 
                 lastEndTime = end;
             }
 
-            // Check remaining free time at the end of the day
             if (ChronoUnit.HOURS.between(lastEndTime, endOfDay) >= durationInHours) {
                 return formatFreeSlot(lastEndTime, durationInHours);
             }
@@ -186,12 +193,10 @@ public class TaskList {
      * Formats the output message for a free slot.
      */
     private String formatFreeSlot(LocalDateTime startTime, int durationInHours) {
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy h:mm a");
 
         return "The nearest " + durationInHours + "-hour free slot is on "
-                + startTime.format(dateFormatter) + " from "
-                + startTime.format(timeFormatter) + " to "
-                + startTime.plusHours(durationInHours).format(timeFormatter);
+                + startTime.format(formatter) + " to "
+                + startTime.plusHours(durationInHours).format(formatter);
     }
 }
