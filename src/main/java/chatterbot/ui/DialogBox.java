@@ -24,7 +24,11 @@ public class DialogBox extends HBox {
     @FXML
     private ImageView displayPicture;
 
-    private DialogBox(String text, Image img) {
+    private boolean isUser;
+
+    private DialogBox(String text, Image img, boolean isUser) {
+        this.isUser = isUser;
+
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/DialogBox.fxml"));
             fxmlLoader.setController(this);
@@ -36,6 +40,13 @@ public class DialogBox extends HBox {
 
         dialog.setText(text);
         displayPicture.setImage(img);
+
+        // Apply different background colors for user and bot messages
+        if (isUser) {
+            dialog.setStyle("-fx-background-color: #e0ffff; -fx-background-radius: 15; -fx-padding: 10;");
+        } else {
+            dialog.setStyle("-fx-background-color: #e0c2f2; -fx-background-radius: 15; -fx-padding: 10;");
+        }
     }
 
     /**
@@ -49,11 +60,11 @@ public class DialogBox extends HBox {
     }
 
     public static DialogBox getUserDialog(String text, Image img) {
-        return new DialogBox(text, img);
+        return new DialogBox(text, img, true);
     }
 
     public static DialogBox getChatterBotDialog(String text, Image img) {
-        var db = new DialogBox(text, img);
+        var db = new DialogBox(text, img, false);
         db.flip();
         return db;
     }
