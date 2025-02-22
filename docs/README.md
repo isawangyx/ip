@@ -13,7 +13,7 @@ java -jar ChatterBot.jar
 ```
 
 
-## Adding tasks
+## Add tasks
 
 ChatterBot helps you track tasks easily. There are three types of tasks: todos, deadlines with a due date, and events with start and end times. 
 
