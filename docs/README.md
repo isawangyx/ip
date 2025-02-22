@@ -1,5 +1,5 @@
 # ChatterBot User Guide
-![Screenshot of ChatterBot](/docs/Ui.png)
+![Screenshot of ChatterBot](Ui.png)
 
 ## Introduction
 Welcome to ChatterBot, your intelligent chatbot assistant for task management.
